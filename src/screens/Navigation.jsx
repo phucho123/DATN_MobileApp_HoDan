@@ -18,15 +18,15 @@ const MainTabNavigator = () => {
       screenOptions={({ route }) => ({
         tabBarIcon: TabBar,
         tabBarStyle: {
-          height: 64,
-          paddingBottom: 8,
+          height: 80,
+          paddingBottom: 20,
         },
         tabBarActiveTintColor: "#384EC7",
         tabBarInactiveTintColor: "gray",
         headerStyle: {
           height: 80,
         },
-        headerTitleStyle: { fontSize: 22, fontWeight: "600" },
+        headerTitleStyle: { display: "none" },
       })}
     >
       <Tab.Screen name="Trang chủ" component={Home} />

@@ -2,7 +2,7 @@ import React, { useState, createContext } from "react";
 const AuthenticationAPI = createContext();
 
 export const AuthenticationContext = ({ children }) => {
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
   const [user, setUser] = useState({
     fullname: "",
     email: "",
