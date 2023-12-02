@@ -44,10 +44,11 @@ function Login() {
       //   MOCK DATA ASSUME LOGIN SUCCESS
       setIsLogin(true);
       setUser({
-        fullname: "Pill",
+        fullName: "Pill",
         email: "Pill@gmail.com",
         address: "LA",
         phoneNumber: "012346",
+        birthday: "13/01/2002",
       });
     }
   };
