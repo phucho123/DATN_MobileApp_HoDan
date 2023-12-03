@@ -3,11 +3,11 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "./home/Home";
 import Question from "./question/Question";
-import Setting from "./setting/Setting";
 import Notification from "./notification/Notification";
 import TabBar from "../components/TabBar";
 import Login from "./login/Login";
 import AuthenticationAPI from "../context/authContext";
+import SettingStack from "./setting/SettingStack";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -32,7 +32,7 @@ const MainTabNavigator = () => {
       <Tab.Screen name="Trang chủ" component={Home} />
       <Tab.Screen name="Thông báo" component={Notification} />
       <Tab.Screen name="Hỏi đáp" component={Question} />
-      <Tab.Screen name="Cài đặt" component={Setting} />
+      <Tab.Screen name="Cài đặt" component={SettingStack} />
     </Tab.Navigator>
   );
 };
@@ -52,7 +52,7 @@ const AppNavigator = () => {
       }}
     >
       {isLogin === false ? (
-        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+        <Stack.Screen name="Đăng nhập" component={Login} options={{ headerShown: false }} />
       ) : (
         <Stack.Screen name="Main" component={MainTabNavigator} options={{ headerShown: false }} />
       )}
