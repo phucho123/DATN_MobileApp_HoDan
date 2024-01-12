@@ -3,6 +3,7 @@ const AuthenticationAPI = createContext();
 
 export const AuthenticationContext = ({ children }) => {
   const [isLogin, setIsLogin] = useState(false);
+  const [deviceID, setDeviceID] = useState(0);
   const [user, setUser] = useState({
     fullName: "",
     email: "",
@@ -12,7 +13,9 @@ export const AuthenticationContext = ({ children }) => {
   });
 
   return (
-    <AuthenticationAPI.Provider value={{ isLogin, setIsLogin, user, setUser }}>{children}</AuthenticationAPI.Provider>
+    <AuthenticationAPI.Provider value={{ isLogin, setIsLogin, user, setUser, deviceID, setDeviceID }}>
+      {children}
+    </AuthenticationAPI.Provider>
   );
 };
 

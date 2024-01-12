@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import styles from "./login.style";
 import CustomInput from "../../components/customInput/CustomInput";
 import AuthenticationAPI from "../../context/authContext";
@@ -12,7 +12,7 @@ function Login() {
     password: "",
   });
 
-  const { setIsLogin, setUser } = useContext(AuthenticationAPI);
+  const { setIsLogin, setUser, setDeviceID } = useContext(AuthenticationAPI);
 
   const validateInput = () => {
     const emailRegex = /^\S+@\S+\.\S+$/;
@@ -43,6 +43,7 @@ function Login() {
       };
       //   MOCK DATA ASSUME LOGIN SUCCESS
       setIsLogin(true);
+      setDeviceID("64b708b7a3c0");
       setUser({
         fullName: "Pill",
         email: "Pill@gmail.com",
@@ -56,42 +57,44 @@ function Login() {
   return (
     <>
       <View style={styles.wrapper}>
-        <View style={styles.sloganBlock}>
-          <Text style={styles.sloganText}>
-            <Text style={styles.sloganTextRed}>Protect</Text> Our Water,
-          </Text>
-          <Text style={styles.sloganText}>
-            <Text style={styles.sloganTextRed}>Sustain</Text> Our Future,
-          </Text>
-          <Text style={[styles.sloganText, styles.sloganTextRed]}>Every Drop Matters!</Text>
-          <Image
-            source={require("../../../assets/images/hcmut.png")}
-            style={{ height: 150, width: 150, marginLeft: -28 }}
-          />
-        </View>
-        <View style={styles.container}>
-          <Text style={styles.title}>ĐĂNG NHẬP</Text>
-          <CustomInput
-            containerStyle={{ marginVertical: 4 }}
-            placeholder={"Email"}
-            onChangeText={setEmail}
-            error={errorInput.email}
-          />
-          <CustomInput
-            containerStyle={{ marginVertical: 4 }}
-            placeholder={"Mật khẩu"}
-            onChangeText={setPasword}
-            error={errorInput.password}
-            secureTextEntry
-          />
-          <TouchableOpacity style={styles.loginBtn} onPress={() => handleLogin()}>
-            <Text style={styles.loginText}>ĐĂNG NHẬP</Text>
-          </TouchableOpacity>
-          <Image
-            source={require("../../../assets/images/logo.png")}
-            style={{ height: 150, width: 150, alignSelf: "center" }}
-          />
-        </View>
+        <ScrollView>
+          <View style={styles.sloganBlock}>
+            <Text style={styles.sloganText}>
+              <Text style={styles.sloganTextRed}>Protect</Text> Our Water,
+            </Text>
+            <Text style={styles.sloganText}>
+              <Text style={styles.sloganTextRed}>Sustain</Text> Our Future,
+            </Text>
+            <Text style={[styles.sloganText, styles.sloganTextRed]}>Every Drop Matters!</Text>
+            <Image
+              source={require("../../../assets/images/hcmut.png")}
+              style={{ height: 150, width: 150, marginLeft: -28 }}
+            />
+          </View>
+          <View style={styles.container}>
+            <Text style={styles.title}>ĐĂNG NHẬP</Text>
+            <CustomInput
+              containerStyle={{ marginVertical: 4 }}
+              placeholder={"Email"}
+              onChangeText={setEmail}
+              error={errorInput.email}
+            />
+            <CustomInput
+              containerStyle={{ marginVertical: 4 }}
+              placeholder={"Mật khẩu"}
+              onChangeText={setPasword}
+              error={errorInput.password}
+              secureTextEntry
+            />
+            <TouchableOpacity style={styles.loginBtn} onPress={() => handleLogin()}>
+              <Text style={styles.loginText}>ĐĂNG NHẬP</Text>
+            </TouchableOpacity>
+            <Image
+              source={require("../../../assets/images/logo.png")}
+              style={{ height: 150, width: 150, alignSelf: "center" }}
+            />
+          </View>
+        </ScrollView>
       </View>
     </>
   );

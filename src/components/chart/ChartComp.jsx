@@ -2,7 +2,25 @@ import React from "react";
 import { Text, View, Dimensions } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 
-const ChartComp = ({ title }) => {
+const ChartComp = ({ title, data }) => {
+  const labelsList = data.map((item) => item.time);
+  let labels = labelsList.length > 5 ? labelsList.slice(-5) : labelsList;
+
+  labels = labels.map((timestamp) => {
+    const date = new Date(timestamp);
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+    return `${day}-${month}`;
+  });
+
+  const valueList = data.map((item) => item.value);
+  const dataArr = valueList.length > 5 ? valueList.slice(-5) : valueList;
+
+  console.log(labels[0]);
+
   return (
     <View style={{ width: "100%" }}>
       <Text style={{ fontSize: 18, color: "orange", fontWeight: "bold", textAlign: "center", marginBottom: 4 }}>
@@ -31,30 +49,23 @@ const ChartComp = ({ title }) => {
       <View>
         <LineChart
           data={{
-            labels: ["January", "February", "March", "April", "May", "June"],
+            labels: labels,
             datasets: [
               {
-                data: [
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                ],
+                data: dataArr,
               },
             ],
           }}
           width={Dimensions.get("window").width - 20} // from react-native
           height={220}
-          yAxisLabel="$"
-          yAxisSuffix="k"
+          // yAxisLabel="m³"
+          // yAxisSuffix="k"
           yAxisInterval={1} // optional, defaults to 1
           chartConfig={{
             backgroundColor: "#4285f4",
             backgroundGradientFrom: "#4285F4",
             backgroundGradientTo: "#C7DCFE",
-            decimalPlaces: 2, // optional, defaults to 2dp
+            decimalPlaces: 0, // optional, defaults to 2dp
             color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
             labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
             style: {

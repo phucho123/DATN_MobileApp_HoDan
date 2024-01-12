@@ -4,9 +4,13 @@ import { Image, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "r
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AuthenticationAPI from "../../context/authContext";
 import ChartComp from "../../components/chart/ChartComp";
+import MqttAPI from "../../context/mqttContext";
 
 const Home = () => {
   const { user, setUser } = useContext(AuthenticationAPI);
+  const { flowRateList, totalRateList } = useContext(MqttAPI);
+
+  console.log("FlowrateList:", flowRateList[flowRateList.length - 1].value);
 
   return (
     <>
@@ -84,7 +88,7 @@ const Home = () => {
                     style={{ height: 80, width: 80, alignSelf: "center" }}
                   />
                   <Text style={styles.flowRateTitle}>Lưu lượng tức thời</Text>
-                  <Text style={styles.flowRateValue}>1000</Text>
+                  <Text style={styles.flowRateValue}>{flowRateList[flowRateList.length - 1].value}</Text>
                   <Text style={styles.flowRateUnit}>m³</Text>
                 </View>
                 <View style={styles.flowRateItem}>
@@ -93,7 +97,7 @@ const Home = () => {
                     style={{ height: 80, width: 80, alignSelf: "center" }}
                   />
                   <Text style={styles.flowRateTitle}>Tổng lưu lượng</Text>
-                  <Text style={styles.flowRateValue}>1000</Text>
+                  <Text style={styles.flowRateValue}>{totalRateList[totalRateList.length - 1].value}</Text>
                   <Text style={styles.flowRateUnit}>m³</Text>
                 </View>
               </View>
@@ -108,10 +112,20 @@ const Home = () => {
               </View>
               <View style={{ width: "100%" }}>
                 <View style={{ width: "100%" }}>
-                  <ChartComp title={"Biểu đồ lưu lượng tức thời"} colorFrom={"#4285F4"} colorTo={"#C7DCFE"} />
+                  <ChartComp
+                    title={"Biểu đồ lưu lượng tức thời"}
+                    colorFrom={"#4285F4"}
+                    colorTo={"#C7DCFE"}
+                    data={flowRateList}
+                  />
                 </View>
                 <View style={{ width: "100%" }}>
-                  <ChartComp title={"Biểu đồ tổng lưu lượng"} colorFrom={"#4285F4"} colorTo={"#C7DCFE"} />
+                  <ChartComp
+                    title={"Biểu đồ tổng lưu lượng"}
+                    colorFrom={"#4285F4"}
+                    colorTo={"#C7DCFE"}
+                    data={totalRateList}
+                  />
                 </View>
               </View>
             </View>
