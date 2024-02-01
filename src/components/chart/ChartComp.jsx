@@ -6,6 +6,8 @@ const ChartComp = ({ title, data }) => {
   const labelsList = data.map((item) => item.time);
   let labels = labelsList.length > 5 ? labelsList.slice(-5) : labelsList;
 
+  // let labels = ["16-1", "16-1", "16-1", "16-1", "16-1"]
+
   labels = labels.map((timestamp) => {
     const date = new Date(timestamp);
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -18,6 +20,8 @@ const ChartComp = ({ title, data }) => {
 
   const valueList = data.map((item) => item.value);
   const dataArr = valueList.length > 5 ? valueList.slice(-5) : valueList;
+
+  // const dataArr = [15, 30, 50, 90, 100]
 
   console.log(labels[0]);
 
