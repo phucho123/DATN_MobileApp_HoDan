@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import CustomInput from "../../components/customInput/CustomInput";
@@ -11,6 +11,9 @@ import { OPENAI_KEY } from "../../../secrete";
 const Question = () => {
   const [text, setText] = useState("");
   const [messageArr, setMessageArr] = useState([]);
+  ///new code////
+  const scrollViewRef = useRef();
+
 
   const sendQuestion = async (question) => {
     const res = await axios('https://api.openai.com/v1/chat/completions', {
@@ -56,7 +59,10 @@ const Question = () => {
   return (
     <SafeAreaView style={{ width: "100%", height: "100%", backgroundColor: "#D9FBFF" }}>
       <View style={{ flex: 1 }}>
-        <ScrollView>
+        <ScrollView
+          ref={scrollViewRef}
+          onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
+        >
           <View style={{
             width: "100%",
             display: "flex",
