@@ -25,7 +25,6 @@ client.connect({
 export const MqttContext = ({ children }) => {
   const [flowRateList, setFlowRateList] = useState([{ value: 0, time: "" }]);
   const [totalRateList, setTotalRateList] = useState([{ value: 0, time: "" }]);
-  const { deviceID } = useContext(AuthenticationAPI);
 
   useEffect(() => {
     client.onMessageArrived = async (message) => {
@@ -39,12 +38,11 @@ export const MqttContext = ({ children }) => {
     };
   }, []);
 
-  const { accessToken, setAccessToken, user } = useContext(AuthenticationAPI);
+  const { accessToken, user } = useContext(AuthenticationAPI);
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log("Token:", accessToken);
-      if (deviceID) {
+      if (accessToken && user.id) {
         try {
           const res = await axios.get(`${SERVER_URL}/user/by-id?userId=${user.id}`, {
             headers: {
@@ -52,27 +50,24 @@ export const MqttContext = ({ children }) => {
             },
           });
 
-          console.log("Res: ", res.data);
-
-          const flowRateData = res.data.map((item) => ({
+          const flowRateData = res.data.listValue.map((item) => ({
             value: item.flowRateValue,
-            time: item.updatedAt.slice(5, 10),
+            time: new Date(item.updatedAt).toLocaleString(),
           }));
-          const totalRateData = res.data.map((item) => ({
+          const totalRateData = res.data.listValue.map((item) => ({
             value: item.totalFlowValue,
-            time: item.updatedAt.slice(5, 10),
+            time: new Date(item.updatedAt).toLocaleString(),
           }));
 
           setFlowRateList(flowRateData);
           setTotalRateList(totalRateData);
         } catch (error) {
           console.error("Error fetching data:", error);
-          // Handle error here, e.g., set an error state or show an error message
         }
       }
     };
     fetchData();
-  }, [deviceID]);
+  }, [accessToken, user]);
 
   return (
     <MqttAPI.Provider value={{ flowRateList, setFlowRateList, totalRateList, setTotalRateList }}>

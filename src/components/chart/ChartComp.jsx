@@ -4,26 +4,24 @@ import { LineChart } from "react-native-chart-kit";
 
 const ChartComp = ({ title, data }) => {
   const labelsList = data.map((item) => item.time);
-  let labels = labelsList.length > 5 ? labelsList.slice(-5) : labelsList;
+  const labels = data.map((item) => {
+    if (!item.time) {
+      return "N/A";
+    }
 
-  // let labels = ["16-1", "16-1", "16-1", "16-1", "16-1"]
+    const dateTimeParts = item.time.split(", ");
+    if (dateTimeParts.length < 2) {
+      return "N/A";
+    }
 
-  labels = labels.map((timestamp) => {
-    const date = new Date(timestamp);
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-    const seconds = String(date.getSeconds()).padStart(2, "0");
-    return `${day}-${month}`;
+    const dateParts = dateTimeParts[0].split("/");
+    const day = dateParts[0];
+    const month = dateParts[1];
+    return `${day}/${month}`;
   });
 
   const valueList = data.map((item) => item.value);
   const dataArr = valueList.length > 5 ? valueList.slice(-5) : valueList;
-
-  // const dataArr = [15, 30, 50, 90, 100]
-
-  console.log("Label: ", labels[0]);
 
   return (
     <View style={{ width: "100%" }}>
@@ -41,13 +39,13 @@ const ChartComp = ({ title, data }) => {
         }}
       >
         <Text style={{ fontWeight: 600, fontSize: 16, color: "#0F9D58" }}>
-          Lớn nhất: <Text>1500</Text>
+          Lớn nhất: <Text>{Math.max(...valueList)}</Text>
         </Text>
         <Text style={{ fontWeight: 600, fontSize: 16, color: "#0F9D58" }}>
-          Nhỏ nhất: <Text>500</Text>
+          Nhỏ nhất: <Text>{Math.min(...valueList)}</Text>
         </Text>
         <Text style={{ fontWeight: 600, fontSize: 16, fontStyle: "italic", color: "#0F9D58" }}>
-          Cập nhật mới nhất lúc: <Text>12/12/2023</Text>
+          Cập nhật mới nhất lúc: <Text>{labelsList[labelsList.length - 1]}</Text>
         </Text>
       </View>
       <View>

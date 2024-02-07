@@ -10,8 +10,6 @@ const Home = () => {
   const { user, setUser } = useContext(AuthenticationAPI);
   const { flowRateList, totalRateList } = useContext(MqttAPI);
 
-  console.log("FlowrateList:", flowRateList[flowRateList.length - 1].value);
-
   return (
     <>
       <SafeAreaView style={styles.container}>

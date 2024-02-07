@@ -68,7 +68,6 @@ function Login() {
         const userData = await axios.get(`${SERVER_URL}/user/by-id?userId=${response.data.userId}`, axiosConfig);
         console.log("Data:", userData.data);
 
-        // setDeviceID("64b708b7a3c0");
         setUser({
           id: response.data.userId,
           fullName: userData.data.fullName,

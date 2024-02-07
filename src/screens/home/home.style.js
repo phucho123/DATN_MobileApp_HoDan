@@ -38,7 +38,7 @@ export default styles = StyleSheet.create({
   },
   heading: {
     backgroundColor: "#DFEAFF",
-    width: "50%",
+    maxWidth: "55%",
     borderRadius: 8,
     marginBottom: 8,
     flexDirection: "row",
