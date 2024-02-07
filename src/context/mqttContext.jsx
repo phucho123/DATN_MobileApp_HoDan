@@ -3,6 +3,7 @@ import Paho from "paho-mqtt";
 import { ADAFRUIT_USER, ADAFRUIT_KEY, SERVER_URL } from "../../secrete";
 import axios from "axios";
 import AuthenticationAPI from "./authContext";
+import { apiCaller } from "../../api";
 
 const MqttAPI = createContext();
 
@@ -38,23 +39,36 @@ export const MqttContext = ({ children }) => {
     };
   }, []);
 
+  const { accessToken, setAccessToken, user } = useContext(AuthenticationAPI);
+
   useEffect(() => {
     const fetchData = async () => {
-      console.log("deviceID:", deviceID);
+      console.log("Token:", accessToken);
       if (deviceID) {
-        const res = await axios.get(`${SERVER_URL}/water-meter/list-by-id?id=${deviceID}`);
+        try {
+          const res = await axios.get(`${SERVER_URL}/user/by-id?userId=${user.id}`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
 
-        const flowRateData = res.data.map((item) => ({
-          value: item.flowRateValue,
-          time: item.updatedAt.slice(5, 10),
-        }));
-        const totalRateData = res.data.map((item) => ({
-          value: item.totalFlowValue,
-          time: item.updatedAt.slice(5, 10),
-        }));
+          console.log("Res: ", res.data);
 
-        setFlowRateList(flowRateData);
-        setTotalRateList(totalRateData);
+          const flowRateData = res.data.map((item) => ({
+            value: item.flowRateValue,
+            time: item.updatedAt.slice(5, 10),
+          }));
+          const totalRateData = res.data.map((item) => ({
+            value: item.totalFlowValue,
+            time: item.updatedAt.slice(5, 10),
+          }));
+
+          setFlowRateList(flowRateData);
+          setTotalRateList(totalRateData);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          // Handle error here, e.g., set an error state or show an error message
+        }
       }
     };
     fetchData();

@@ -23,7 +23,7 @@ const ChartComp = ({ title, data }) => {
 
   // const dataArr = [15, 30, 50, 90, 100]
 
-  console.log(labels[0]);
+  console.log("Label: ", labels[0]);
 
   return (
     <View style={{ width: "100%" }}>

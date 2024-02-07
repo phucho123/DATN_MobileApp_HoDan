@@ -1,8 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import styles from "./login.style";
 import CustomInput from "../../components/customInput/CustomInput";
 import AuthenticationAPI from "../../context/authContext";
+import Toast from "../../components/toast/Toast";
+import axios from "axios";
+import { apiCaller } from "../../../api";
+import { SERVER_URL } from "../../../secrete";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -12,7 +16,15 @@ function Login() {
     password: "",
   });
 
-  const { setIsLogin, setUser, setDeviceID } = useContext(AuthenticationAPI);
+  const { setIsLogin, setUser, setDeviceID, setAccessToken } = useContext(AuthenticationAPI);
+  const toastRef = useRef();
+  const showToast = (content, type, delay, redirectTo) => {
+    if (toastRef.current) {
+      toastRef.current.hide(() => {
+        toastRef.current.show(content, type, delay, redirectTo);
+      });
+    }
+  };
 
   const validateInput = () => {
     const emailRegex = /^\S+@\S+\.\S+$/;
@@ -34,7 +46,7 @@ function Login() {
     return isValidEmail && isValidPassword;
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (validateInput()) {
       console.log("Call Api to login");
       const data = {
@@ -42,21 +54,39 @@ function Login() {
         password,
       };
       //   MOCK DATA ASSUME LOGIN SUCCESS
-      setIsLogin(true);
-      setDeviceID("64b708b7a3c0");
-      setUser({
-        fullName: "Pill",
-        email: "Pill@gmail.com",
-        address: "LA",
-        phoneNumber: "012346",
-        birthday: "13/01/2002",
-      });
+      const response = await apiCaller("POST", "/auth/login", data);
+
+      if (response.status === 200) {
+        setIsLogin(true);
+        setAccessToken(response.data.accessToken);
+
+        const axiosConfig = {
+          headers: {
+            Authorization: `Bearer ${response.data.accessToken}`,
+          },
+        };
+        const userData = await axios.get(`${SERVER_URL}/user/by-id?userId=${response.data.userId}`, axiosConfig);
+        console.log("Data:", userData.data);
+
+        // setDeviceID("64b708b7a3c0");
+        setUser({
+          id: response.data.userId,
+          fullName: userData.data.fullName,
+          email: userData.data.email,
+          address: userData.data.address,
+          phoneNumber: userData.data.phoneNumber,
+        });
+        showToast("Đăng nhập thành công", "success", 200, "Trang chủ");
+      } else {
+        showToast("Đăng nhập thất bại", "error", 200);
+      }
     }
   };
 
   return (
     <>
       <View style={styles.wrapper}>
+        <Toast ref={toastRef} />
         <ScrollView>
           <View style={styles.sloganBlock}>
             <Text style={styles.sloganText}>
