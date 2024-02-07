@@ -12,6 +12,7 @@ export default styles = StyleSheet.create({
     borderTopRightRadius: 40,
     backgroundColor: "#D9FBFF",
     padding: 40,
+    paddingBottom: 150,
   },
   title: {
     fontSize: 28,
