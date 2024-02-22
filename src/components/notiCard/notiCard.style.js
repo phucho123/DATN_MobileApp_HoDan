@@ -17,12 +17,12 @@ export default styles = StyleSheet.create({
     marginBottom: 16,
   },
   cardIcon: {
-    position: "absolute",
-    right: 6,
-    top: 6,
-    padding: 4,
+    marginLeft: "auto",
+    zIndex: 9999,
+    padding: 12,
   },
   cardGroup: {
+    marginTop: -40,
     padding: 12,
   },
   cardItem: {
