@@ -48,14 +48,14 @@ function Login() {
 
   const handleLogin = async () => {
     if (validateInput()) {
-      console.log("Call Api to login");
       const data = {
         email,
         password,
       };
       //   MOCK DATA ASSUME LOGIN SUCCESS
       const response = await apiCaller("POST", "/auth/login", data);
-
+      console.log(response)
+      
       if (response.status === 200) {
         setIsLogin(true);
         setAccessToken(response.data.accessToken);
@@ -83,7 +83,6 @@ function Login() {
   };
 
   return (
-    <>
       <View style={styles.wrapper}>
         <Toast ref={toastRef} />
         <ScrollView>
@@ -125,7 +124,6 @@ function Login() {
           </View>
         </ScrollView>
       </View>
-    </>
   );
 }
 

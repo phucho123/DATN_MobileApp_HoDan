@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { SERVER_URL } from "./secrete";
 
 const axiosPublic = axios.create({
-  baseURL: `${SERVER_URL}`,
+  baseURL: "http://192.168.120.71:8080",
 });
 
 axiosPublic.interceptors.request.use(

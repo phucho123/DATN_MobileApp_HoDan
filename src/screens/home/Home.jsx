@@ -11,7 +11,6 @@ const Home = () => {
   const { flowRateList, totalRateList } = useContext(MqttAPI);
 
   return (
-    <>
       <SafeAreaView style={styles.container}>
         <View
           style={{
@@ -130,7 +129,6 @@ const Home = () => {
           </View>
         </ScrollView>
       </SafeAreaView>
-    </>
   );
 };
 

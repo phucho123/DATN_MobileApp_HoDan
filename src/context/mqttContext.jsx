@@ -11,8 +11,8 @@ const client = new Paho.Client("wss://io.adafruit.com:443/mqtt/", "");
 
 client.connect({
   useSSL: true,
-  userName: ADAFRUIT_USER,
-  password: ADAFRUIT_KEY,
+  userName: "hongphat03",
+  password: "",
   onSuccess: () => {
     console.log("Connected to Adafruit");
     client.subscribe(`${ADAFRUIT_USER}/feeds/datn.water-sensor`);
