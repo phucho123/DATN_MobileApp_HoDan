@@ -4,6 +4,7 @@ import { LineChart } from "react-native-chart-kit";
 
 const ChartComp = ({ title, data }) => {
   const labelsList = data.map((item) => item.time);
+  console.log(data);
   const labels = data.map((item) => {
     if (!item.time) {
       return "N/A";
@@ -17,7 +18,9 @@ const ChartComp = ({ title, data }) => {
     const dateParts = dateTimeParts[0].split("/");
     const day = dateParts[0];
     const month = dateParts[1];
-    return `${day}/${month}`;
+    // return `${day}/${month}`;
+    const res = day.split(":")[0] + ":" + day.split(":")[1];
+    return res;
   });
 
   const valueList = data.map((item) => item.value);
@@ -72,6 +75,10 @@ const ChartComp = ({ title, data }) => {
             labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
             style: {
               borderRadius: 16,
+            },
+            propsForLabels: {
+              fontSize: 12, // Adjust the font size as needed
+              paddingHorizontal: 5, // Adjust the horizontal padding as needed
             },
             propsForDots: {
               r: "6",

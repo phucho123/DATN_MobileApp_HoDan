@@ -2,7 +2,7 @@ import React, { useState, createContext, useEffect, useContext } from "react";
 import Paho from "paho-mqtt";
 import { ADAFRUIT_USER, ADAFRUIT_KEY, SERVER_URL } from "../../secrete";
 import axios from "axios";
-import AuthenticationAPI from "./authContext";
+import AuthenticationAPI, { AuthenticationContext, useAuth } from "./authContext";
 import { apiCaller } from "../../api";
 
 const MqttAPI = createContext();
@@ -11,8 +11,8 @@ const client = new Paho.Client("wss://io.adafruit.com:443/mqtt/", "");
 
 client.connect({
   useSSL: true,
-  userName: "hongphat03",
-  password: "",
+  userName: ADAFRUIT_USER,
+  password: ADAFRUIT_KEY,
   onSuccess: () => {
     console.log("Connected to Adafruit");
     client.subscribe(`${ADAFRUIT_USER}/feeds/datn.water-sensor`);
@@ -25,16 +25,21 @@ client.connect({
 export const MqttContext = ({ children }) => {
   const [flowRateList, setFlowRateList] = useState([{ value: 0, time: "" }]);
   const [totalRateList, setTotalRateList] = useState([{ value: 0, time: "" }]);
+  const { deviceID } = useContext(AuthenticationAPI);
+  // console.log(deviceID);
 
   useEffect(() => {
     client.onMessageArrived = async (message) => {
       console.log("Message arrived on topic:", message.destinationName, message.payloadString);
       const data = JSON.parse(message.payloadString.replace(/\s/g, "").replace(/'/g, '"'));
 
-      const newFlowRate = data.flowRateValue;
-      const newTotalRate = data.totalFlowValue;
-      setFlowRateList((prevList) => [...prevList, { value: newFlowRate, time: Date.now() }]);
-      setTotalRateList((prevList) => [...prevList, { value: newTotalRate, time: Date.now() }]);
+      if (deviceID == data.waterMeterId) {
+        const newFlowRate = data.flowRateValue;
+        const newTotalRate = data.totalFlowValue;
+        setFlowRateList((prevList) => [...prevList, { value: newFlowRate, time: new Date(Date.now()).toLocaleString() }]);
+        setTotalRateList((prevList) => [...prevList, { value: newTotalRate, time: new Date(Date.now()).toLocaleString() }]);
+      }
+
     };
   }, []);
 
@@ -58,6 +63,7 @@ export const MqttContext = ({ children }) => {
             value: item.totalFlowValue,
             time: new Date(item.updatedAt).toLocaleString(),
           }));
+
 
           setFlowRateList(flowRateData);
           setTotalRateList(totalRateData);

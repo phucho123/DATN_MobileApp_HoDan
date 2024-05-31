@@ -54,9 +54,21 @@ function Login() {
       };
       //   MOCK DATA ASSUME LOGIN SUCCESS
       const response = await apiCaller("POST", "/auth/login", data);
-      console.log(response)
-      
+      // console.log(data);
+      // const response = await fetch('http://192.168.120.88:8080/auth/login', {
+      //   method: "POST",
+      //   headers: {
+      //     'Content-Type': 'application/json', // Set the content type to JSON
+      //     // 'Authorization': 'Bearer YOUR_ACCESS_TOKEN' // If you need to include a token
+      //   },
+      //   body: JSON.stringify(data)
+      // });
+      // let res = await response.json();
+      // console.log(res);
+
+      console.log(response.data)
       if (response.status === 200) {
+
         setIsLogin(true);
         setAccessToken(response.data.accessToken);
 
@@ -67,6 +79,11 @@ function Login() {
         };
         const userData = await axios.get(`${SERVER_URL}/user/by-id?userId=${response.data.userId}`, axiosConfig);
         console.log("Data:", userData.data);
+
+
+        setDeviceID(userData.data.listValue[0].waterMeterId);
+
+        console.log("device ID: ", userData.data.listValue[0].waterMeterId)
 
         setUser({
           id: response.data.userId,
@@ -83,47 +100,47 @@ function Login() {
   };
 
   return (
-      <View style={styles.wrapper}>
-        <Toast ref={toastRef} />
-        <ScrollView>
-          <View style={styles.sloganBlock}>
-            <Text style={styles.sloganText}>
-              <Text style={styles.sloganTextRed}>Protect</Text> Our Water,
-            </Text>
-            <Text style={styles.sloganText}>
-              <Text style={styles.sloganTextRed}>Sustain</Text> Our Future,
-            </Text>
-            <Text style={[styles.sloganText, styles.sloganTextRed]}>Every Drop Matters!</Text>
-            <Image
-              source={require("../../../assets/images/hcmut.png")}
-              style={{ height: 150, width: 150, marginLeft: -28 }}
-            />
-          </View>
-          <View style={styles.container}>
-            <Text style={styles.title}>ĐĂNG NHẬP</Text>
-            <CustomInput
-              containerStyle={{ marginVertical: 4 }}
-              placeholder={"Email"}
-              onChangeText={setEmail}
-              error={errorInput.email}
-            />
-            <CustomInput
-              containerStyle={{ marginVertical: 4 }}
-              placeholder={"Mật khẩu"}
-              onChangeText={setPasword}
-              error={errorInput.password}
-              secureTextEntry
-            />
-            <TouchableOpacity style={styles.loginBtn} onPress={() => handleLogin()}>
-              <Text style={styles.loginText}>ĐĂNG NHẬP</Text>
-            </TouchableOpacity>
-            <Image
-              source={require("../../../assets/images/logo.png")}
-              style={{ height: 150, width: 150, alignSelf: "center" }}
-            />
-          </View>
-        </ScrollView>
-      </View>
+    <View style={styles.wrapper}>
+      <Toast ref={toastRef} />
+      <ScrollView>
+        <View style={styles.sloganBlock}>
+          <Text style={styles.sloganText}>
+            <Text style={styles.sloganTextRed}>Protect</Text> Our Water,
+          </Text>
+          <Text style={styles.sloganText}>
+            <Text style={styles.sloganTextRed}>Sustain</Text> Our Future,
+          </Text>
+          <Text style={[styles.sloganText, styles.sloganTextRed]}>Every Drop Matters!</Text>
+          <Image
+            source={require("../../../assets/images/hcmut.png")}
+            style={{ height: 150, width: 150, marginLeft: -28 }}
+          />
+        </View>
+        <View style={styles.container}>
+          <Text style={styles.title}>ĐĂNG NHẬP</Text>
+          <CustomInput
+            containerStyle={{ marginVertical: 4 }}
+            placeholder={"Email"}
+            onChangeText={setEmail}
+            error={errorInput.email}
+          />
+          <CustomInput
+            containerStyle={{ marginVertical: 4 }}
+            placeholder={"Mật khẩu"}
+            onChangeText={setPasword}
+            error={errorInput.password}
+            secureTextEntry
+          />
+          <TouchableOpacity style={styles.loginBtn} onPress={() => handleLogin()}>
+            <Text style={styles.loginText}>ĐĂNG NHẬP</Text>
+          </TouchableOpacity>
+          <Image
+            source={require("../../../assets/images/logo.png")}
+            style={{ height: 150, width: 150, alignSelf: "center" }}
+          />
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
